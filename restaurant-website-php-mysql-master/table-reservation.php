@@ -341,3 +341,4 @@
 
     <!-- FOOTER BOTTOM  -->
 
+    <?php include "Includes/templates/footer.php"; ?>
