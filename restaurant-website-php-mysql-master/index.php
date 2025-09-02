@@ -309,112 +309,93 @@
 			</div>
 		</div>
 	</section>
-
-	<!-- IMAGE GALLERY -->
-
-	<section class="image-gallery" id="gallery">
-		<div class="container">
-			<h2 style="text-align: center;margin-bottom: 30px">IMAGE GALLERY</h2>
-			<?php
-				$stmt_image_gallery = $con->prepare("Select * from image_gallery");
-                $stmt_image_gallery->execute();
-                $rows_image_gallery = $stmt_image_gallery->fetchAll();
-
-                echo "<div class = 'row'>";
-
-	                foreach($rows_image_gallery as $row_image_gallery)
-	                {
-	                	echo "<div class = 'col-md-4 col-lg-3' style = 'padding: 15px;'>";
-	                		$source = "admin/Uploads/images/".$row_image_gallery['image'];
-	                		?>
-
-	                		<div style = "background-image: url('<?php echo $source; ?>') !important;background-repeat: no-repeat;background-position: 50% 50%;background-size: cover;background-clip: border-box;box-sizing: border-box;overflow: hidden;height: 230px;">
-	                		</div>
-
-	                		<?php
-	                	echo "</div>";
-	                }
-
-	            echo "</div>";
-			?>
-		</div>
-	</section>
-
 	<!-- CONTACT US SECTION -->
+<?php
+include 'connect.php'; // file kết nối DB
+$status_message = "";
 
-	<section class="contact-section" id="contact">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6 sm-padding">
-                    <div class="contact-info">
-                        <h2>
-                            Get in touch with us & 
-                            <br>send us message today!
-                        </h2>
-                        <p>
-                            Saasbiz is a different kind of architecture practice. Founded by LoganCee in 1991, we’re an employee-owned firm pursuing a democratic design process that values everyone’s input.
-                        </p>
-                        <h3>
-                            <?php echo $restaurant_address; ?>
-                        </h3>
-                        <h4>
-                            <span>Email:</span> 
-                            <?php echo $restaurant_email; ?>
-                            <br> 
-                            <span>Phone:</span> 
-                            <?php echo $restaurant_phonenumber; ?>
-                        </h4>
-                    </div>
+// Xử lý khi nhấn nút gửi
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_contact'])) {
+    $name    = trim($_POST['name']);
+    $email   = trim($_POST['email']);
+    $subject = trim($_POST['subject']);
+    $message = trim($_POST['message']);
+
+    if ($name == "" || $email == "" || $subject == "" || $message == "") {
+        $status_message = "<div class='alert alert-danger'>Vui lòng nhập đầy đủ thông tin</div>";
+    } else {
+        $stmt = $con->prepare("INSERT INTO contacts (name, email, subject, message) VALUES (?, ?, ?, ?)");
+        $result = $stmt->execute([$name, $email, $subject, $message]);
+
+        if ($result) {
+            $status_message = "<div class='alert alert-success'>Gửi liên hệ thành công!</div>";
+        } else {
+            $status_message = "<div class='alert alert-danger'>Có lỗi xảy ra, vui lòng thử lại</div>";
+        }
+    }
+}
+?>
+
+<section class="contact-section" id="contact">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 sm-padding">
+                <div class="contact-info">
+                    <h2>
+                        Get in touch with us & 
+                        <br>send us message today!
+                    </h2>
+                    <p>
+                        Saasbiz is a different kind of architecture practice. Founded by LoganCee in 1991, we’re an employee-owned firm pursuing a democratic design process that values everyone’s input.
+                    </p>
+                    <h3>
+                        <?php echo $restaurant_address; ?>
+                    </h3>
+                    <h4>
+                        <span>Email:</span> 
+                        <?php echo $restaurant_email; ?>
+                        <br> 
+                        <span>Phone:</span> 
+                        <?php echo $restaurant_phonenumber; ?>
+                    </h4>
                 </div>
-                <div class="col-lg-6 sm-padding">
-                    <div class="contact-form">
-                        <div id="contact_ajax_form" class="contactForm">
-                            <div class="form-group colum-row row">
-                                <div class="col-sm-6">
-                                    <input type="text" id="contact_name" name="name" oninput="document.getElementById('invalid-name').innerHTML = ''" onkeyup="this.value=this.value.replace(/[^\sa-zA-Z]/g,'');" class="form-control" placeholder="Name">
-                                    <div class="invalid-feedback" id="invalid-name" style="display: block">
-                                    	
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <input type="email" id="contact_email" name="email" oninput="document.getElementById('invalid-email').innerHTML = ''" class="form-control" placeholder="Email">
-                                    <div class="invalid-feedback" id="invalid-email" style="display: block">
-                                    	
-                                    </div>
-                                </div>
+            </div>
+            <div class="col-lg-6 sm-padding">
+                <div class="contact-form">
+                    <!-- Form gửi liên hệ -->
+                    <form method="POST" class="contactForm">
+                        <div class="form-group colum-row row">
+                            <div class="col-sm-6">
+                                <input type="text" name="name" class="form-control" placeholder="Name" required>
                             </div>
-                            <div class="form-group row">
-                                <div class="col-md-12">
-                                    <input type="text" id="contact_subject" name="subject" oninput="document.getElementById('invalid-subject').innerHTML = ''" onkeyup="this.value=this.value.replace(/[^\sa-zA-Z]/g,'');" class="form-control" placeholder="Subject">
-                                    <div class="invalid-feedback" id="invalid-subject" style="display: block">
-                                    	
-                                    </div>
-                                </div>
+                            <div class="col-sm-6">
+                                <input type="email" name="email" class="form-control" placeholder="Email" required>
                             </div>
-                            <div class="form-group row">
-                                <div class="col-md-12">
-                                    <textarea id="contact_message" name="message" oninput="document.getElementById('invalid-message').innerHTML = ''" cols="30" rows="5" class="form-control message" placeholder="Message"></textarea>
-                                    <div class="invalid-feedback" id="invalid-message" style="display: block">
-                                    	
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-md-12">
-                                    <button id="contact_send" class="bttn_style_2">Send Message</button>
-                                </div>
-                            </div>
-                            <div id="sending_load" style="display: none;">Sending...</div>
-                            <div id="contact_status_message"></div>
                         </div>
-                    </div>
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <input type="text" name="subject" class="form-control" placeholder="Subject" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <textarea name="message" cols="30" rows="5" class="form-control message" placeholder="Message" required></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <button type="submit" name="send_contact" class="bttn_style_2">Send Message</button>
+                            </div>
+                        </div>
+                        <!-- Hiển thị thông báo -->
+                        <?php if ($status_message != "") echo $status_message; ?>
+                    </form>
                 </div>
             </div>
         </div>
-    </section>
-
-
-						
+    </div>
+</section>
+	
 	<!-- OUR QUALITIES SECTION -->
 	
 	<section class="our_qualities_v2">
@@ -457,11 +438,11 @@
                             Our Restaurnt is one of the bests, provide tasty Menus and Dishes. You can reserve a table or Order food.
                         </p>
                         <ul class="widget_social">
-                            <li><a href="#" data-toggle="tooltip" title="Facebook"><i class="fab fa-facebook-f fa-2x"></i></a></li>
-                            <li><a href="#" data-toggle="tooltip" title="Twitter"><i class="fab fa-twitter fa-2x"></i></a></li>
-                            <li><a href="#" data-toggle="tooltip" title="Instagram"><i class="fab fa-instagram fa-2x"></i></a></li>
-                            <li><a href="#" data-toggle="tooltip" title="LinkedIn"><i class="fab fa-linkedin fa-2x"></i></a></li>
-                            <li><a href="#" data-toggle="tooltip" title="Google+"><i class="fab fa-google-plus-g fa-2x"></i></a></li>
+                            <li><a href="https://www.facebook.com/" data-toggle="tooltip" title="Facebook"><i class="fab fa-facebook-f fa-2x"></i></a></li>
+                            <li><a href="https://www.facebook.com/" data-toggle="tooltip" title="Twitter"><i class="fab fa-twitter fa-2x"></i></a></li>
+                            <li><a href="https://www.facebook.com/" data-toggle="tooltip" title="Instagram"><i class="fab fa-instagram fa-2x"></i></a></li>
+                            <li><a href="https://www.facebook.com/" data-toggle="tooltip" title="LinkedIn"><i class="fab fa-linkedin fa-2x"></i></a></li>
+                            <li><a href="https://www.facebook.com/" data-toggle="tooltip" title="Google+"><i class="fab fa-google-plus-g fa-2x"></i></a></li>
                         </ul>
                     </div>
                 </div>
@@ -508,8 +489,6 @@
     </section>
 
     <!-- FOOTER BOTTOM  -->
-
-    <?php include "Includes/templates/footer.php"; ?>
 
     <script type="text/javascript">
 

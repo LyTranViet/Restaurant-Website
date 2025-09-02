@@ -237,16 +237,15 @@ CREATE TABLE `users` (
   `username` varchar(20) NOT NULL,
   `email` varchar(30) NOT NULL,
   `full_name` varchar(50) NOT NULL,
-  `password` varchar(100) NOT NULL
+  `password` varchar(100) NOT NULL,
+  `role` VARCHAR(50) NOT NULL DEFAULT 'customer'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `users`
 --
-
-INSERT INTO `users` (`user_id`, `username`, `email`, `full_name`, `password`) VALUES
-(1, 'admin_user', 'user_admin@gmail.com', 'User Admin', 'f7c3bc1d808e04732adf679965ccc34ca7ae3441');
-
+INSERT INTO `users` (`user_id`, `username`, `email`, `full_name`, `password`, `role`) VALUES
+(1, 'admin_user', 'user_admin@gmail.com', 'User Admin', 'f7c3bc1d808e04732adf679965ccc34ca7ae3441', 'admin');
 -- --------------------------------------------------------
 
 --
