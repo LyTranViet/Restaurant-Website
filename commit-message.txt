@@ -1,0 +1,18 @@
+Issue Title
+[Feature] Sửa thông tin món ăn - Cập nhật thông tin món
+
+Issue Description
+**User Story**: US002 - Sửa thông tin món ăn
+**Task**: ST006 - Cập nhật thông tin món ăn
+**Priority**: Must-be
+**Assignee**: Lê Thanh Trọng
+
+### Mô tả
+- Cho phép cập nhật thông tin món ăn (tên, giá, mô tả, hình ảnh, trạng thái).
+- Xác thực dữ liệu đầu vào trước khi lưu.
+- Ghi log thay đổi thông tin.
+
+### Acceptance Criteria
+- Người dùng có thể chỉnh sửa và lưu thành công thông tin món ăn.
+- Dữ liệu cập nhật hiển thị ngay trên giao diện danh sách.
+- Không để trống trường bắt buộc.
