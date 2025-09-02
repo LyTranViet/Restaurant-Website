@@ -1,12 +1,11 @@
-<?php include '../connect.php'; ?>
-<?php include '../Includes/functions/functions.php'; ?>
-
 <?php
-	
-	// Kiểm tra nếu người dùng chưa đăng nhập hoặc vai trò không hợp lệ
+session_start(); // Thêm dòng này
+include '../connect.php';
+include '../Includes/functions/functions.php';
+
 if (!isset($_SESSION['role_restaurant_qRewacvAqzA']) || 
     !in_array($_SESSION['role_restaurant_qRewacvAqzA'], ['admin', 'employee'])) {
-    echo json_encode(['error' => 'Access denied']);
+    echo json_encode(['error' => 'Access denied. Session: ' . print_r($_SESSION, true)]);
     die();
 }
 
